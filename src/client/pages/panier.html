@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XYZ E-commerce - Panier</title>
+    <link href="/styles/output.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8">Votre Panier</h1>
+        
+        <div id="cartContent" class="space-y-4">
+            <div id="emptyCart" class="hidden text-gray-500 text-center py-8">
+                Votre panier est vide
+            </div>
+            
+            <div id="cartItems" class="space-y-4"></div>
+            
+            <div id="cartTotal" class="hidden text-right text-xl font-bold">
+                Total: <span class="text-blue-600">0 €</span>
+            </div>
+        </div>
+    </main>
+
+    <script>
+    async function loadCart() {
+        try {
+            const response = await fetch('/api/cart/items');
+            const data = await response.json();
+            
+            const cartItems = document.getElementById('cartItems');
+            const emptyCart = document.getElementById('emptyCart');
+            const cartTotal = document.getElementById('cartTotal');
+            
+            if (data.items && data.items.length > 0) {
+                cartItems.innerHTML = data.items.map(item => `
+                    <div class="flex items-center justify-between bg-white p-4 rounded-lg shadow">
+                        <div class="flex items-center space-x-4">
+                            <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded">
+                            <div>
+                                <h3 class="font-semibold">${item.name}</h3>
+                                <p class="text-gray-500">${item.price} € x ${item.quantity}</p>
+                            </div>
+                        </div>
+                        <button onclick="removeFromCart(${item.id})" class="text-red-600 hover:text-red-800">
+                            Supprimer
+                        </button>
+                    </div>
+                `).join('');
+                
+                cartTotal.classList.remove('hidden');
+                cartTotal.querySelector('span').textContent = `${data.total} €`;
+                emptyCart.classList.add('hidden');
+            } else {
+                cartItems.innerHTML = '';
+                cartTotal.classList.add('hidden');
+                emptyCart.classList.remove('hidden');
+            }
+        } catch (error) {
+            console.error('Erreur:', error);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadCart);
+    </script>
+</body>
+</html> 

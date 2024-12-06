@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XYZ E-commerce - Détail Produit</title>
+    <link href="/styles/output.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="text-xl font-bold text-gray-800">XYZ Shop</a>
+                </div>
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="/" class="text-gray-800 hover:text-blue-600">Accueil</a>
+                    <a href="/catalogue.html" class="text-gray-800 hover:text-blue-600">Catalogue</a>
+                    <a href="/produit.html" class="text-gray-800 hover:text-blue-600">Produits</a>
+                    <a href="/contact.html" class="text-gray-800 hover:text-blue-600">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+                <img src="/assets/images/car5.jpg" alt="Produit" class="w-full rounded-lg shadow-md">
+            </div>
+            
+            <div>
+                <h1 class="text-3xl font-bold mb-4">Nom du Produit</h1>
+                <p class="text-2xl font-bold text-blue-600 mb-4">99,99 €</p>
+                <p class="text-gray-600 mb-6">Description détaillée du produit...</p>
+                
+                <form id="addToCartForm" class="space-y-4">
+                    <div>
+                        <label for="quantity" class="block text-sm font-medium text-gray-700">Quantité</label>
+                        <input type="number" id="quantity" min="1" value="1" 
+                            class="mt-1 block w-24 rounded-md border-gray-300 shadow-sm">
+                    </div>
+                    
+                    <div id="cartStatus" class="hidden">
+                        <p class="text-green-600 success hidden">Produit ajouté au panier!</p>
+                        <p class="text-red-600 error hidden">Erreur lors de l'ajout au panier.</p>
+                    </div>
+
+                    <button type="submit" 
+                        class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                        Ajouter au panier
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-20">
+        <div class="max-w-6xl mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4">À propos</h3>
+                    <p>XYZ Shop - Votre boutique en ligne de confiance</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Contact</h3>
+                    <p>Email: contact@xyz.com</p>
+                    <p>Tél: 01 23 45 67 89</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Liens utiles</h3>
+                    <ul>
+                        <li><a href="/mentions-legales" class="hover:text-blue-400">Mentions légales</a></li>
+                        <li><a href="/cgv" class="hover:text-blue-400">CGV</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    document.getElementById('addToCartForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = {
+            productId: 1,
+            quantity: parseInt(document.getElementById('quantity').value)
+        };
+
+        try {
+            const response = await fetch('/api/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+            const cartStatus = document.getElementById('cartStatus');
+            const successMessage = cartStatus.querySelector('.success');
+            const errorMessage = cartStatus.querySelector('.error');
+
+            cartStatus.classList.remove('hidden');
+            
+            if (data.success) {
+                successMessage.classList.remove('hidden');
+                errorMessage.classList.add('hidden');
+            } else {
+                errorMessage.textContent = data.error;
+                errorMessage.classList.remove('hidden');
+                successMessage.classList.add('hidden');
+            }
+        } catch (error) {
+            console.error('Erreur:', error);
+            const cartStatus = document.getElementById('cartStatus');
+            const errorMessage = cartStatus.querySelector('.error');
+            cartStatus.classList.remove('hidden');
+            errorMessage.textContent = 'Une erreur est survenue';
+            errorMessage.classList.remove('hidden');
+        }
+    });
+    </script>
+</body>
+</html> 

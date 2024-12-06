@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XYZ E-commerce - Catalogue</title>
+    <link href="/styles/output.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="text-xl font-bold text-gray-800">XYZ Shop</a>
+                </div>
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="/" class="text-gray-800 hover:text-blue-600">Accueil</a>
+                    <a href="/catalogue.html" class="text-gray-800 hover:text-blue-600">Catalogue</a>
+                    <a href="/produit.html" class="text-gray-800 hover:text-blue-600">Produits</a>
+                    <a href="/contact.html" class="text-gray-800 hover:text-blue-600">Contact</a>
+                    <a href="/panier.html" class="relative text-gray-800 hover:text-blue-600">
+                        <span class="absolute -top-2 -right-2 bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs cart-count">0</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8">Nos Produits</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="/assets/images/car5.jpg" alt="Produit 1" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h2 class="text-xl font-semibold mb-2">Produit 1</h2>
+                    <p class="text-gray-600 mb-4">Description du produit...</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg font-bold">99,99 €</span>
+                        <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                            Voir détails
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </main>
+
+</body>
+<script>
+    function updateCartCount() {
+        fetch('/api/cart/count')
+            .then(response => response.json())
+            .then(data => {
+                const cartCountElements = document.querySelectorAll('.cart-count');
+                cartCountElements.forEach(element => {
+                    element.textContent = data.count || '0';
+                });
+            })
+            .catch(error => console.error('Erreur:', error));
+    }
+    
+    document.addEventListener('DOMContentLoaded', updateCartCount);
+    setInterval(updateCartCount, 30000);
+    </script>
+</html> 

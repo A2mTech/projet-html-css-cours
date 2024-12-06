@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XYZ E-commerce - Accueil</title>
+    <link href="/styles/output.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="text-xl font-bold text-gray-800">XYZ Shop</a>
+                </div>
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="/" class="text-gray-800 hover:text-blue-600">Accueil</a>
+                    <a href="/catalogue.html" class="text-gray-800 hover:text-blue-600">Catalogue</a>
+                    <a href="/produit.html" class="text-gray-800 hover:text-blue-600">Produits</a>
+                    <a href="/contact.html" class="text-gray-800 hover:text-blue-600">Contact</a>
+                    <a href="/panier.html" class="relative text-gray-800 hover:text-blue-600">
+                        <span class="absolute -top-2 -right-2 bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs cart-count">0</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="bg-blue-600 text-white py-20">
+            <div class="max-w-6xl mx-auto px-4">
+                <h1 class="text-4xl font-bold mb-4">Bienvenue chez XYZ</h1>
+                <p class="text-xl">Découvrez notre sélection de produits exceptionnels</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-20">
+        <div class="max-w-6xl mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4">À propos</h3>
+                    <p>XYZ Shop - Votre boutique en ligne de confiance</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Contact</h3>
+                    <p>Email: contact@xyz.com</p>
+                    <p>Tél: 01 23 45 67 89</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Liens utiles</h3>
+                    <ul>
+                        <li><a href="/mentions-legales" class="hover:text-blue-400">Mentions légales</a></li>
+                        <li><a href="/cgv" class="hover:text-blue-400">CGV</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    function updateCartCount() {
+        fetch('/api/cart/count')
+            .then(response => response.json())
+            .then(data => {
+                const cartCountElements = document.querySelectorAll('.cart-count');
+                cartCountElements.forEach(element => {
+                    element.textContent = data.count || '0';
+                });
+            })
+            .catch(error => console.error('Erreur:', error));
+    }
+
+    document.addEventListener('DOMContentLoaded', updateCartCount);
+    setInterval(updateCartCount, 30000);
+    </script>
+</body>
+</html> 
